@@ -6,7 +6,7 @@
 #include <stdint.h>
 #include <string.h>
 #include <signal.h>
-#include <errno.h>  // Để xử lý lỗi errno
+#include <errno.h>  // compile error
 
 #define DEVICE_PATH "/dev/TCS34725"
 
@@ -27,7 +27,7 @@ int main() {
     char buffer[128];
     ssize_t bytesRead;
     uint8_t atime = 0xEB;   // Integration time
-    uint8_t gain  = 0x01;   // Gain = 16x
+    uint8_t gain  = 0x10;   // Gain = 16x
     uint8_t enable = 0x03;  // Power on + ADC enable
 
     signal(SIGINT, int_handler);  // Handle Ctrl+C
@@ -54,7 +54,6 @@ int main() {
             buffer[bytesRead] = '\0';
             printf("Read data: %s", buffer);
         } else if (bytesRead == -1 && (errno == EAGAIN || errno == EWOULDBLOCK)) {
-            // Dữ liệu chưa sẵn sàng – không in lỗi
             printf("Waiting for valid sensor data...\n");
             continue;
         } else {
